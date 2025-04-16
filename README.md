@@ -251,53 +251,61 @@ This helps improve performance by delaying the loading of off-screen images unti
 
 All gallery components share these props:
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `items` | `GalleryItem[]` | Array of items to display in the gallery |
-| `renderItem` | `(item, index) => ReactNode` | Custom render function for items |
-| `className` | `string` | CSS class for the gallery container |
-| `style` | `CSSProperties` | Inline styles for the gallery container |
-| `itemClassName` | `string` | CSS class for each item |
-| `itemStyle` | `CSSProperties` | Inline styles for each item |
-| `onItemClick` | `(item, index) => void` | Click handler for items |
-| `lazyLoad` | `boolean` | Enable native lazy loading of images |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `GalleryItem[]` | Required | Array of items to display in the gallery |
+| `renderItem` | `(item, index) => ReactNode` | Default renderer | Custom render function for items |
+| `className` | `string` | `""` | CSS class for the gallery container |
+| `style` | `CSSProperties` | `{}` | Inline styles for the gallery container |
+| `itemClassName` | `string` | `""` | CSS class for each item |
+| `itemStyle` | `CSSProperties` | `{}` | Inline styles for each item |
+| `onItemClick` | `(item, index) => void` | `undefined` | Click handler for items |
+| `lazyLoad` | `boolean` | `false` | Enable native lazy loading of images |
 
 ### Layout-Specific Props
 
-#### MasonryGallery and StackGallery
-| Prop | Type | Description |
-|------|------|-------------|
-| `columns` | `number \| { [key: string]: number }` | Number of columns, or object with breakpoints |
-| `gutter` | `number \| { [key: string]: number }` | Gap between items |
+#### MasonryGallery
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `number \| { [key: string]: number }` | `3` | Number of columns, or object with breakpoints |
+| `gutter` | `number \| { [key: string]: number }` | `10` | Gap between items in pixels |
 
 #### GridGallery
-| Prop | Type | Description |
-|------|------|-------------|
-| `columns` | `number \| { [key: string]: number }` | Number of columns, or object with breakpoints |
-| `gutter` | `number \| { [key: string]: number }` | Gap between items |
-| `itemHeight` | `number \| string` | Fixed height for all items |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `number \| { [key: string]: number }` | `3` | Number of columns, or object with breakpoints |
+| `gutter` | `number \| { [key: string]: number }` | `10` | Gap between items in pixels |
+| `itemHeight` | `number \| string` | `"auto"` | Fixed height for all items |
+
+#### StackGallery
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `number \| { [key: string]: number }` | `3` | Number of columns, or object with breakpoints |
+| `gutter` | `number` | `10` | Gap between items in pixels |
+| `maxWidth` | `number \| string` | `"100%"` | Maximum width for each column |
 
 #### JustifiedGallery
-| Prop | Type | Description |
-|------|------|-------------|
-| `targetRowHeight` | `number` | Target height for rows |
-| `maxRowHeight` | `number` | Maximum row height |
-| `containerPadding` | `number` | Padding around the container |
-| `gutter` | `number` | Gap between items |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `targetRowHeight` | `number` | `200` | Target height for rows in pixels |
+| `maxRowHeight` | `number` | `400` | Maximum row height in pixels |
+| `containerPadding` | `number` | `0` | Padding around the container in pixels |
+| `gutter` | `number` | `10` | Gap between items in pixels |
+| `containerWidth` | `number` | Parent width | Width of the container in pixels |
 
 ### Gallery Item Type
 
 ```ts
 interface GalleryItem {
-  id: string | number;
-  src: string;
-  alt?: string;
-  width?: number;
-  height?: number;
-  aspectRatio?: number;
-  colSpan?: number; // Number of columns this item spans (default: 1)
-  rowSpan?: number; // Number of rows this item spans (default: 1)
-  [key: string]: any; // Additional custom properties
+  id: string | number;       // Unique identifier (required)
+  src: string;               // Image source URL (required)
+  alt?: string;              // Alt text (default: "Gallery item [index]")
+  width?: number;            // Original image width in pixels (recommended)
+  height?: number;           // Original image height in pixels (recommended)
+  aspectRatio?: number;      // Width/height ratio (calculated if not provided)
+  colSpan?: number;          // Number of columns to span (default: 1)
+  rowSpan?: number;          // Number of rows to span (default: 1)
+  [key: string]: any;        // Additional custom properties
 }
 ```
 

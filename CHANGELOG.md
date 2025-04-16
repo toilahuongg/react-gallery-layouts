@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-04-17
+
+### Added
+- Comprehensive documentation for all component props
+- Added GitHub Actions workflow for automated npm publishing
+- Improved TypeScript type definitions with detailed JSDoc comments
+
+### Changed
+- Updated README with default values for all component props
+- Enhanced documentation for the GalleryItem interface
+- Improved MasonryGallery responsive handling
+
+### Fixed
+- Fixed TypeScript type definitions accuracy
+- Added missing documentation for containerWidth property
+
 ## [0.1.0] - 2025-04-17
 
 ### Added

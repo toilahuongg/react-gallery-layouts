@@ -1,51 +1,226 @@
 import { CSSProperties, ReactNode } from 'react';
 
+/**
+ * Available gallery layout types
+ */
 export type GalleryLayout = 'masonry' | 'grid' | 'stack' | 'justified';
 
+/**
+ * Represents an item in the gallery
+ */
 export interface GalleryItem {
+  /**
+   * Unique identifier for the item
+   */
   id: string | number;
+  
+  /**
+   * Source URL of the image
+   */
   src: string;
+  
+  /**
+   * Alternative text for the image
+   * @default "Gallery item"
+   */
   alt?: string;
+  
+  /**
+   * Width of the original image in pixels
+   * Required for proper layout calculations
+   */
   width?: number;
+  
+  /**
+   * Height of the original image in pixels
+   * Required for proper layout calculations
+   */
   height?: number;
+  
+  /**
+   * The aspect ratio of the item (width/height)
+   * If not provided, it will be calculated from the width and height
+   * Example: 16/9 = 1.7777777777777777
+   */
   aspectRatio?: number;
+  
+  /**
+   * The number of columns the item should span horizontally
+   * @default 1
+   */
   colSpan?: number;
+  
+  /**
+   * The number of rows the item should span vertically
+   * @default 1
+   */
   rowSpan?: number;
+  
+  /**
+   * Any additional properties
+   */
   [key: string]: any;
 }
 
+/**
+ * Base properties shared by all gallery components
+ */
 export interface BaseGalleryProps {
+  /**
+   * Array of items to display in the gallery
+   */
   items: GalleryItem[];
+  
+  /**
+   * Custom render function for each item
+   * @param item - The gallery item to render
+   * @param index - The index of the item in the array
+   * @returns A React node to render
+   */
   renderItem?: (item: GalleryItem, index: number) => ReactNode;
+  
+  /**
+   * CSS class for the gallery container
+   * @default ""
+   */
   className?: string;
+  
+  /**
+   * Inline styles for the gallery container
+   * @default {}
+   */
   style?: CSSProperties;
+  
+  /**
+   * CSS class for each item in the gallery
+   * @default ""
+   */
   itemClassName?: string;
+  
+  /**
+   * Inline styles for each item in the gallery
+   * @default {}
+   */
   itemStyle?: CSSProperties;
+  
+  /**
+   * Function to call when an item is clicked
+   * @param item - The clicked gallery item
+   * @param index - The index of the clicked item
+   */
   onItemClick?: (item: GalleryItem, index: number) => void;
+  
+  /**
+   * Whether to enable native lazy loading for images
+   * @default false
+   */
   lazyLoad?: boolean;
 }
 
+/**
+ * Properties for the Masonry Gallery component
+ */
 export interface MasonryGalleryProps extends BaseGalleryProps {
+  /**
+   * Number of columns to display
+   * Can be a fixed number or an object with breakpoints
+   * @example { 768: 2, 1024: 3, default: 1 }
+   * @default 3
+   */
   columns?: number | { [key: string]: number };
+  
+  /**
+   * Space between items in pixels
+   * Can be a fixed number or an object with breakpoints
+   * @default 10
+   */
   gutter?: number | { [key: string]: number };
 }
 
+/**
+ * Properties for the Grid Gallery component
+ */
 export interface GridGalleryProps extends BaseGalleryProps {
+  /**
+   * Number of columns to display
+   * Can be a fixed number or an object with breakpoints
+   * @example { 768: 2, 1024: 3, default: 1 }
+   * @default 3
+   */
   columns?: number | { [key: string]: number };
+  
+  /**
+   * Space between items in pixels
+   * Can be a fixed number or an object with breakpoints
+   * @default 10
+   */
   gutter?: number | { [key: string]: number };
+  
+  /**
+   * Fixed height for all items
+   * Can be a number (in pixels) or a CSS string value
+   * @default "auto"
+   */
   itemHeight?: number | string;
 }
 
+/**
+ * Properties for the Stack Gallery component
+ */
 export interface StackGalleryProps extends BaseGalleryProps {
+  /**
+   * Number of columns to display
+   * Can be a fixed number or an object with breakpoints
+   * @example { 768: 2, 1024: 3, default: 1 }
+   * @default 3
+   */
   columns?: number | { [key: string]: number };
+  
+  /**
+   * Space between items in pixels
+   * @default 10
+   */
   gutter?: number;
+  
+  /**
+   * Maximum width of each column
+   * Can be a number (in pixels) or a CSS string value
+   * @default "100%"
+   */
   maxWidth?: number | string;
 }
 
+/**
+ * Properties for the Justified Gallery component
+ */
 export interface JustifiedGalleryProps extends BaseGalleryProps {
+  /**
+   * Target height for each row in pixels
+   * @default 200
+   */
   targetRowHeight?: number;
+  
+  /**
+   * Width of the container in pixels
+   * If not provided, it will use the parent element's width
+   */
   containerWidth?: number;
+  
+  /**
+   * Maximum height for each row in pixels
+   * @default 400
+   */
   maxRowHeight?: number;
+  
+  /**
+   * Padding around the container in pixels
+   * @default 0
+   */
   containerPadding?: number;
+  
+  /**
+   * Space between items in pixels
+   * @default 10
+   */
   gutter?: number;
 } 
