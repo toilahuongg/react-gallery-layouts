@@ -1,0 +1,51 @@
+{
+  "name": "react-gallery-layouts",
+  "version": "0.1.0",
+  "description": "React gallery layouts library with masonry, stack, grid, and justified layouts",
+  "main": "dist/react-gallery-layouts.js",
+  "module": "dist/react-gallery-layouts.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "prepare": "npm run build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "react",
+    "gallery",
+    "masonry",
+    "grid",
+    "stack",
+    "justified",
+    "layout",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.3",
+    "@types/node": "^18.0.0",
+    "@types/react": "^18.0.14",
+    "@types/react-dom": "^18.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
+    "@typescript-eslint/parser": "^5.29.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^8.18.0",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^4.7.4",
+    "vite": "^4.3.9",
+    "vite-plugin-dts": "^2.3.0"
+  }
+} 
