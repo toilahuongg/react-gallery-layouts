@@ -12,6 +12,7 @@ A modern, responsive gallery library built with React and TypeScript, supporting
 - 📦 TypeScript support
 - 📚 Comprehensive documentation
 - 🧪 Example implementation
+- 📏 Aspect ratio control
 
 ## Installation
 
@@ -68,6 +69,18 @@ const MyGallery = () => {
 ### Layout Options
 
 #### Grid Layout
+The Grid layout arranges items in a fixed-height grid with equal-sized cells. Each item can optionally span multiple columns and rows using `colSpan` and `rowSpan` properties.
+
+Options:
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| columns | `number \| { [breakpoint: number]: number }` | `3` | Number of columns, can be responsive |
+| gutter | `number \| { [breakpoint: number]: number }` | `10` | Space between items in pixels |
+| itemHeight | `number` | `200` | Fixed height for all items |
+| aspectRatio | `number` | `undefined` | Fixed aspect ratio for items (width/height) |
+
+Example:
+
 ```tsx
 layoutOptions={{
   grid: {
@@ -79,6 +92,16 @@ layoutOptions={{
 ```
 
 #### Masonry Layout
+The Masonry layout arranges items in a grid with variable-sized columns. Each item can optionally span multiple columns using `colSpan` property.
+
+Options:
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| columns | `number \| { [breakpoint: number]: number }` | `3` | Number of columns, can be responsive |
+| gutter | `number \| { [breakpoint: number]: number }` | `10` | Space between items in pixels |
+
+Example:
+
 ```tsx
 layoutOptions={{
   masonry: {
@@ -89,6 +112,18 @@ layoutOptions={{
 ```
 
 #### Stack Layout
+The Stack layout arranges items in a single column with a maximum width.
+
+Options:
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| columns | `number \| { [breakpoint: number]: number }` | `2` | Number of columns, can be responsive |
+| gutter | `number \| { [breakpoint: number]: number }` | `10` | Space between items in pixels |
+| maxWidth | `number` | `800` | Maximum width of the container |
+| alignment | `'flex-start' \| 'center' \| 'flex-end'` | `'flex-start'` | Alignment of items within the container |
+
+Example:
+
 ```tsx
 layoutOptions={{
   stack: {
@@ -100,6 +135,18 @@ layoutOptions={{
 ```
 
 #### Justified Layout
+The Justified layout arranges items in rows with a target height and maximum height.
+
+Options:
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| targetRowHeight | `number` | `200` | Target height for each row |
+| maxRowHeight | `number` | `300` | Maximum row height |
+| containerPadding | `number` | `10` | Padding around the container |
+| gutter | `number` | `10` | Space between items |
+
+Example:
+
 ```tsx
 layoutOptions={{
   justified: {

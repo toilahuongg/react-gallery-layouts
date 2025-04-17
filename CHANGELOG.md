@@ -77,4 +77,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Customizable item rendering
 - TypeScript support
 - Example implementation
-- Documentation 
+- Documentation
+
+## [Unreleased]
+
+### Added
+- Added aspectRatio support to GridGallery component
+  - Support for global aspectRatio prop
+  - Support for individual item aspectRatio
+  - Automatic height calculation based on aspect ratio
+  - Fallback to fixed height when aspect ratio is not specified 

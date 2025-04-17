@@ -71,6 +71,7 @@ const Gallery: React.FC<GalleryProps> = ({
             columns={layoutOptions.grid?.columns}
             gutter={layoutOptions.grid?.gutter}
             itemHeight={layoutOptions.grid?.itemHeight}
+            aspectRatio={layoutOptions.grid?.aspectRatio}
           />
         );
       case 'stack':

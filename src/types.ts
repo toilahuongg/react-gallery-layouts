@@ -174,6 +174,13 @@ export interface GridGalleryProps extends BaseGalleryProps {
    * @default "200"
    */
   itemHeight?: number;
+
+  /**
+   * The aspect ratio of the item (width/height)
+   * If not provided, it will be calculated from the width and height
+   * Example: 16/9 = 1.7777777777777777
+   */
+  aspectRatio?: number;
 }
 
 /**
@@ -258,6 +265,12 @@ export interface GalleryLayoutOptions {
      * @default 10
      */
     gutter?: GalleryGutter;
+    /**
+     * The aspect ratio of the item (width/height)
+     * If not provided, it will be calculated from the width and height
+     * Example: 16/9 = 1.7777777777777777
+     */
+    aspectRatio?: number;
   };
   /**
    * Options for the Grid layout
@@ -274,10 +287,16 @@ export interface GalleryLayoutOptions {
      */
     gutter?: GalleryGutter;
     /**
-     * The height of each item
-     * @default 'auto'
+     * The height of each item in pixels
+     * @default 200
      */
     itemHeight?: number;
+    /**
+     * The aspect ratio of the item (width/height)
+     * If not provided, it will be calculated from the width and height
+     * Example: 16/9 = 1.7777777777777777
+     */
+    aspectRatio?: number;
   };
   /**
    * Options for the Stack layout

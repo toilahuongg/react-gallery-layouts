@@ -33,6 +33,7 @@ const ExampleGallery: React.FC = () => {
         default: 2,
       },
       gutter: 16,
+      aspectRatio: 16 / 9,
     },
     stack: {
       columns: {

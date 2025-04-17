@@ -1,6 +1,6 @@
 {
   "name": "react-gallery-layouts",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "description": "React gallery layouts library with masonry, stack, grid, and justified layouts",
   "main": "dist/react-gallery-layouts.js",
   "module": "dist/react-gallery-layouts.mjs",
