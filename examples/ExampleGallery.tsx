@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Gallery, GalleryItem, GalleryLayout } from '../src';
+import { Gallery, GalleryItem, GalleryLayout, GalleryLayoutOptions } from '../src';
 
 const exampleItems: GalleryItem[] = [
   {
@@ -427,7 +427,7 @@ const ExampleGallery: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [lazyLoad, setLazyLoad] = useState<boolean>(true);
 
-  const layoutOptions = {
+  const layoutOptions: GalleryLayoutOptions = {
     masonry: {
       columns: {
         768: 2,
@@ -453,6 +453,7 @@ const ExampleGallery: React.FC = () => {
       },
       gutter: 16,
       maxWidth: '100%',
+      alignment: 'flex-end',
       // Stack layout is similar to grid but with automatic height that preserves aspect ratio
     },
     justified: {

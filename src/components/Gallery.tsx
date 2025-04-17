@@ -1,35 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { GalleryLayout, GalleryItem, BaseGalleryProps } from '../types';
-import MasonryGallery from './MasonryGallery';
+import React, { useEffect, useRef, useState } from 'react';
+import { GalleryProps } from '../types';
 import GridGallery from './GridGallery';
-import StackGallery from './StackGallery';
 import JustifiedGallery from './JustifiedGallery';
+import MasonryGallery from './MasonryGallery';
+import StackGallery from './StackGallery';
 
-export interface GalleryProps extends BaseGalleryProps {
-  layout?: GalleryLayout;
-  layoutOptions?: {
-    masonry?: {
-      columns?: number | { [key: string]: number };
-      gutter?: number | { [key: string]: number };
-    };
-    grid?: {
-      columns?: number | { [key: string]: number };
-      gutter?: number | { [key: string]: number };
-      itemHeight?: number | string;
-    };
-    stack?: {
-      columns?: number | { [key: string]: number };
-      gutter?: number;
-      maxWidth?: number | string;
-    };
-    justified?: {
-      targetRowHeight?: number;
-      maxRowHeight?: number;
-      containerPadding?: number;
-      gutter?: number;
-    };
-  };
-}
+
 
 const Gallery: React.FC<GalleryProps> = ({
   items,

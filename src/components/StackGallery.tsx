@@ -7,6 +7,7 @@ const StackGallery: React.FC<StackGalleryProps> = ({
   gutter = 10,
   columns = 3,
   maxWidth = '100%',
+  alignment = 'flex-start',
   renderItem,
   className = '',
   style = {},
@@ -39,22 +40,29 @@ const StackGallery: React.FC<StackGalleryProps> = ({
       className={`stack-gallery ${className}`}
       style={{
         width: maxWidth,
-        display: 'grid',
-        gridTemplateColumns: `repeat(${columnsCount}, 1fr)`,
+        display: 'flex',
+        flexWrap: 'wrap',
         gap: gutterSize,
+        alignItems: alignment,
         ...style
       }}
     >
       {normalizedItems.map((item, index) => {
         const itemKey = item.id || `stack-item-${index}`;
-        const colSpan = item.colSpan || 1;
+        const colSpan = Math.min(item.colSpan || 1, columnsCount);
         const rowSpan = item.rowSpan || 1;
         
+        // Calculate the width of this item based on colSpan
+        const itemWidth = `calc(${(100 / columnsCount) * colSpan}% - ${(columnsCount - colSpan) * gutterSize / columnsCount}px)`;
+        
         return (
-          <div key={itemKey}
+          <div 
+            key={itemKey}
             style={{
-              gridColumn: `span ${colSpan}`,
-              gridRow: `span ${rowSpan}`,
+              flexBasis: itemWidth,
+              flexGrow: 0,
+              flexShrink: 0,
+              marginBottom: rowSpan > 1 ? `calc(${gutterSize}px * ${rowSpan - 1})` : 0,
             }}
           >
             <div
@@ -62,6 +70,7 @@ const StackGallery: React.FC<StackGalleryProps> = ({
               style={{
                 width: '100%',
                 overflow: 'hidden',
+                height: rowSpan > 1 ? `calc(100% + ${gutterSize}px * ${rowSpan - 1})` : '100%',
                 ...itemStyle,
               }}
               onClick={onItemClick ? () => onItemClick(item, index) : undefined}

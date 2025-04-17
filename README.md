@@ -100,7 +100,7 @@ export default MyGallery;
 
 #### Stack Layout
 
-The stack layout is similar to the grid layout but with automatic height that preserves the original aspect ratio of each image:
+The stack layout organizes items in a flexbox container with automatic item heights that preserve their original aspect ratios:
 
 ```tsx
 <Gallery
@@ -109,7 +109,8 @@ The stack layout is similar to the grid layout but with automatic height that pr
   layoutOptions={{
     stack: {
       columns: 3, // or responsive: { 768: 2, 1024: 3, default: 1 }
-      gutter: 10
+      gutter: 10,
+      alignment: 'center' // 'flex-start', 'center', or 'flex-end'
     }
   }}
 />
@@ -283,6 +284,7 @@ All gallery components share these props:
 | `columns` | `number \| { [key: string]: number }` | `3` | Number of columns, or object with breakpoints |
 | `gutter` | `number` | `10` | Gap between items in pixels |
 | `maxWidth` | `number \| string` | `"100%"` | Maximum width for each column |
+| `alignment` | `"flex-start" \| "center" \| "flex-end"` | `"flex-start"` | Horizontal alignment of the entire gallery container |
 
 #### JustifiedGallery
 | Prop | Type | Default | Description |

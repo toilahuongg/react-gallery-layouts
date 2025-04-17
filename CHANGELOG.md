@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2025-04-18
+
+### Added
+- Alignment options for StackGallery component (flex-start, center, flex-end)
+
+### Changed
+- Converted StackGallery from CSS Grid to Flexbox for better layout control
+- Updated alignment in StackGallery to apply to the entire container instead of individual items
+- Improved responsive behavior for items that span multiple columns
+
 ## [0.2.0] - 2025-04-17
 
 ### Added

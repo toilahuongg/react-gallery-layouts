@@ -188,6 +188,12 @@ export interface StackGalleryProps extends BaseGalleryProps {
    * @default "100%"
    */
   maxWidth?: number | string;
+
+  /**
+   * Horizontal alignment of items within their columns
+   * @default "flex-start"
+   */
+  alignment?: "flex-start" | "center" | "flex-end";
 }
 
 /**
@@ -224,3 +230,103 @@ export interface JustifiedGalleryProps extends BaseGalleryProps {
    */
   gutter?: number;
 } 
+
+export interface GalleryLayoutOptions {
+  /**
+   * Options for the Masonry layout
+   */
+  masonry?: {
+    /**
+     * The number of columns to display
+     * @default 3
+     */
+    columns?: number | { [key: string]: number };
+    /**
+     * The space between items in pixels
+     * @default 10
+     */
+    gutter?: number | { [key: string]: number };
+  };
+  /**
+   * Options for the Grid layout
+   */
+  grid?: {
+    /**
+     * The number of columns to display
+     * @default 3
+     */
+    columns?: number | { [key: string]: number };
+    /**
+     * The space between items in pixels
+     * @default 10
+     */
+    gutter?: number | { [key: string]: number };
+    /**
+     * The height of each item
+     * @default 'auto'
+     */
+    itemHeight?: number | string;
+  };
+  /**
+   * Options for the Stack layout
+   */
+  stack?: {
+    /**
+     * The number of columns to display
+     * @default 3
+     */
+    columns?: number | { [key: string]: number };
+    /**
+     * The space between items in pixels
+     * @default 10
+     */
+    gutter?: number;
+    /**
+     * The maximum width of each column
+     * @default '100%'
+     */
+    maxWidth?: number | string;
+    /**
+     * The alignment of the items within their columns
+     * @default 'flex-start'
+     */
+    alignment?: 'flex-start' | 'flex-end' | 'center';
+  };
+  /**
+   * Options for the Justified layout
+   */
+  justified?: {
+    /**
+     * The target height for each row in pixels
+     * @default 200
+     */
+    targetRowHeight?: number;
+    /**
+     * The maximum height for each row in pixels
+     * @default 400
+     */
+    maxRowHeight?: number;
+    /**
+     * The padding around the container in pixels
+     * @default 0
+     */
+    containerPadding?: number;
+    /**
+     * The space between items in pixels
+     * @default 10
+     */
+    gutter?: number;
+  };
+}
+
+export interface GalleryProps extends BaseGalleryProps {
+  /**
+   * The layout to use for the gallery
+   * @default 'masonry'
+   */
+  layout?: GalleryLayout;
+  /**
+   * Options for the layout
+   */
+  layoutOptions?: GalleryLayoutOptions;
+}
