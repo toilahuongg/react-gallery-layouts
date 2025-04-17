@@ -1,9 +1,21 @@
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, HTMLAttributes, ReactNode } from 'react';
 
 /**
  * Available gallery layout types
  */
 export type GalleryLayout = 'masonry' | 'grid' | 'stack' | 'justified';
+
+/**
+ * Represents the number of columns to display in the gallery
+ * @default 3 || { default: 3, 768: 2, 1024: 3 }
+ */
+export type GalleryColumns = number | { [key: string]: number };
+
+/**
+ * Represents the gutter between items in the gallery
+ * @default 10 || { default: 10, 768: 20, 1024: 30 }
+ */
+export type GalleryGutter = number | { [key: string]: number };
 
 /**
  * Represents an item in the gallery
@@ -127,14 +139,14 @@ export interface MasonryGalleryProps extends BaseGalleryProps {
    * @example { 768: 2, 1024: 3, default: 1 }
    * @default 3
    */
-  columns?: number | { [key: string]: number };
+  columns?: GalleryColumns;
   
   /**
    * Space between items in pixels
    * Can be a fixed number or an object with breakpoints
    * @default 10
    */
-  gutter?: number | { [key: string]: number };
+  gutter?: GalleryGutter;
 }
 
 /**
@@ -147,21 +159,21 @@ export interface GridGalleryProps extends BaseGalleryProps {
    * @example { 768: 2, 1024: 3, default: 1 }
    * @default 3
    */
-  columns?: number | { [key: string]: number };
+  columns?: GalleryColumns;
   
   /**
    * Space between items in pixels
    * Can be a fixed number or an object with breakpoints
    * @default 10
    */
-  gutter?: number | { [key: string]: number };
+  gutter?: GalleryGutter;
   
   /**
    * Fixed height for all items
-   * Can be a number (in pixels) or a CSS string value
-   * @default "auto"
+   * Can be a number (in pixels)
+   * @default "200"
    */
-  itemHeight?: number | string;
+  itemHeight?: number;
 }
 
 /**
@@ -174,13 +186,13 @@ export interface StackGalleryProps extends BaseGalleryProps {
    * @example { 768: 2, 1024: 3, default: 1 }
    * @default 3
    */
-  columns?: number | { [key: string]: number };
+  columns?: GalleryColumns;
   
   /**
    * Space between items in pixels
    * @default 10
    */
-  gutter?: number;
+  gutter?: GalleryGutter;
   
   /**
    * Maximum width of each column
@@ -228,7 +240,7 @@ export interface JustifiedGalleryProps extends BaseGalleryProps {
    * Space between items in pixels
    * @default 10
    */
-  gutter?: number;
+  gutter?: GalleryGutter;
 } 
 
 export interface GalleryLayoutOptions {
@@ -240,12 +252,12 @@ export interface GalleryLayoutOptions {
      * The number of columns to display
      * @default 3
      */
-    columns?: number | { [key: string]: number };
+    columns?: GalleryColumns;
     /**
      * The space between items in pixels
      * @default 10
      */
-    gutter?: number | { [key: string]: number };
+    gutter?: GalleryGutter;
   };
   /**
    * Options for the Grid layout
@@ -255,17 +267,17 @@ export interface GalleryLayoutOptions {
      * The number of columns to display
      * @default 3
      */
-    columns?: number | { [key: string]: number };
+    columns?: GalleryColumns;
     /**
      * The space between items in pixels
      * @default 10
      */
-    gutter?: number | { [key: string]: number };
+    gutter?: GalleryGutter;
     /**
      * The height of each item
      * @default 'auto'
      */
-    itemHeight?: number | string;
+    itemHeight?: number;
   };
   /**
    * Options for the Stack layout
@@ -275,12 +287,12 @@ export interface GalleryLayoutOptions {
      * The number of columns to display
      * @default 3
      */
-    columns?: number | { [key: string]: number };
+    columns?: GalleryColumns;
     /**
      * The space between items in pixels
      * @default 10
      */
-    gutter?: number;
+    gutter?: GalleryGutter;
     /**
      * The maximum width of each column
      * @default '100%'
@@ -315,7 +327,7 @@ export interface GalleryLayoutOptions {
      * The space between items in pixels
      * @default 10
      */
-    gutter?: number;
+    gutter?: GalleryGutter;
   };
 }
 
@@ -329,4 +341,10 @@ export interface GalleryProps extends BaseGalleryProps {
    * Options for the layout
    */
   layoutOptions?: GalleryLayoutOptions;
+}
+
+
+export interface WindowSize {
+  width: number;
+  height: number;
 }

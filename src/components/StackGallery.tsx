@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { StackGalleryProps, GalleryItem } from '../types';
-import { getColumnsCount, normalizeItems } from '../utils';
+import { getColumnsCount, normalizeItems, getGutter } from '../utils';
+import useWindowResize from '../hooks/useWindowResize';
 
 const StackGallery: React.FC<StackGalleryProps> = ({
   items,
@@ -16,11 +17,12 @@ const StackGallery: React.FC<StackGalleryProps> = ({
   onItemClick,
   lazyLoad = false,
 }) => {
+  const windowSize = useWindowResize();
   const normalizedItems = useMemo(() => normalizeItems(items), [items]);
-  const columnsCount = useMemo(() => getColumnsCount(columns), [columns]);
+  const columnsCount = useMemo(() => getColumnsCount(columns, windowSize), [columns, windowSize]);
 
   // Calculate the effective gutter value
-  const gutterSize = typeof gutter === 'number' ? gutter : 10;
+  const gutterSize = useMemo(() => getGutter(gutter, windowSize), [gutter, windowSize]);
 
   const defaultRenderItem = (item: GalleryItem, index: number) => (
     <img
@@ -51,35 +53,30 @@ const StackGallery: React.FC<StackGalleryProps> = ({
         const itemKey = item.id || `stack-item-${index}`;
         const colSpan = Math.min(item.colSpan || 1, columnsCount);
         const rowSpan = item.rowSpan || 1;
-        
+
         // Calculate the width of this item based on colSpan
         const itemWidth = `calc(${(100 / columnsCount) * colSpan}% - ${(columnsCount - colSpan) * gutterSize / columnsCount}px)`;
-        
+
         return (
-          <div 
+          <div
             key={itemKey}
+            className={`stack-gallery-item ${itemClassName}`}
             style={{
+              width: '100%',
+              overflow: 'hidden',
+              height: rowSpan > 1 ? `calc(100% + ${gutterSize}px * ${rowSpan - 1})` : '100%',
               flexBasis: itemWidth,
               flexGrow: 0,
               flexShrink: 0,
               marginBottom: rowSpan > 1 ? `calc(${gutterSize}px * ${rowSpan - 1})` : 0,
+              ...itemStyle,
             }}
+            onClick={onItemClick ? () => onItemClick(item, index) : undefined}
           >
-            <div
-              className={`stack-gallery-item ${itemClassName}`}
-              style={{
-                width: '100%',
-                overflow: 'hidden',
-                height: rowSpan > 1 ? `calc(100% + ${gutterSize}px * ${rowSpan - 1})` : '100%',
-                ...itemStyle,
-              }}
-              onClick={onItemClick ? () => onItemClick(item, index) : undefined}
-            >
-              {renderItem
-                ? renderItem(item, index)
-                : defaultRenderItem(item, index)
-              }
-            </div>
+            {renderItem
+              ? renderItem(item, index)
+              : defaultRenderItem(item, index)
+            }
           </div>
         );
       })}

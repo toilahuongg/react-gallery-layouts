@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { MasonryGalleryProps, GalleryItem } from '../types';
-import { normalizeItems, getColumnsCount } from '../utils';
+import { normalizeItems, getColumnsCount, getGutter } from '../utils';
+import useWindowResize from '../hooks/useWindowResize';
 
 const MasonryGallery: React.FC<MasonryGalleryProps> = ({
   items,
@@ -15,8 +16,9 @@ const MasonryGallery: React.FC<MasonryGalleryProps> = ({
   lazyLoad = false,
 }) => {
   const normalizedItems = useMemo(() => normalizeItems(items), [items]);
-  const columnsCount = useMemo(() => getColumnsCount(columns), [columns]);
-  const gutterSize = typeof gutter === 'number' ? gutter : 10;
+  const windowSize = useWindowResize();
+  const columnsCount = useMemo(() => getColumnsCount(columns, windowSize), [columns, windowSize]);
+  const gutterSize = useMemo(() => getGutter(gutter, windowSize), [gutter, windowSize]);
   
   const gridItems = useMemo(() => {
     // Create grid layout with positions for each item

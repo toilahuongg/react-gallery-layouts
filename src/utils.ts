@@ -1,5 +1,4 @@
-import { GalleryItem } from './types';
-
+import { GalleryColumns, GalleryGutter, GalleryItem, WindowSize } from './types';
 /**
  * Calculate aspect ratio from width and height
  */
@@ -50,7 +49,7 @@ export const calculateHeight = (width: number, aspectRatio: number): number => {
 /**
  * Determine how many columns to use based on responsive settings
  */
-export const getColumnsCount = (columns: number | { [key: string]: number } = 3): number => {
+export const getColumnsCount = (columns: GalleryColumns = 3, windowSize: WindowSize): number => {
   if (typeof columns === 'number') {
     return columns;
   }
@@ -60,17 +59,48 @@ export const getColumnsCount = (columns: number | { [key: string]: number } = 3)
     return columns.default || 3;
   }
   
-  const viewportWidth = window.innerWidth;
   const breakpoints = Object.keys(columns)
     .filter(breakpoint => breakpoint !== 'default')
     .map(Number)
     .sort((a, b) => a - b);
   
   for (let i = breakpoints.length - 1; i >= 0; i--) {
-    if (viewportWidth >= breakpoints[i]) {
+    if (windowSize.width >= breakpoints[i]) {
       return columns[breakpoints[i]];
     }
   }
   
   return columns.default || 3;
 }; 
+
+/**
+ * Determine how many columns to use based on responsive settings
+ */
+export const getGutter = (gutter: GalleryGutter = 10, windowSize: WindowSize): number => {
+  if (typeof gutter === 'number') {
+    return gutter;
+  }
+
+  const breakpoints = Object.keys(gutter)
+    .filter(breakpoint => breakpoint !== 'default')
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  for (let i = breakpoints.length - 1; i >= 0; i--) {
+    if (windowSize.width >= breakpoints[i]) {
+      return gutter[breakpoints[i]];
+    }
+  }
+
+  return gutter.default || 10;
+};
+
+
+
+export const debounce = (func: Function, delay: number) => {
+  let timeout: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), delay);
+  };
+};

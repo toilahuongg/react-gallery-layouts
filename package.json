@@ -1,6 +1,6 @@
 {
   "name": "react-gallery-layouts",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "React gallery layouts library with masonry, stack, grid, and justified layouts",
   "main": "dist/react-gallery-layouts.js",
   "module": "dist/react-gallery-layouts.mjs",
@@ -47,5 +47,10 @@
     "typescript": "^4.7.4",
     "vite": "^4.3.9",
     "vite-plugin-dts": "^2.3.0"
+  },
+  "dependencies": {
+    "immer": "^10.1.1",
+    "lodash": "^4.17.21",
+    "zustand": "^5.0.3"
   }
-} 
+}

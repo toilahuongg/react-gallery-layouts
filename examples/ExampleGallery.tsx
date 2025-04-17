@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { Gallery, GalleryItem, GalleryLayout, GalleryLayoutOptions } from '../src';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Gallery, GalleryColumns, GalleryGutter, GalleryItem, GalleryLayout, GalleryLayoutOptions, getColumnsCount, getGutter, WindowSize } from '../src';
+import { useGalleryStore } from './store/galleryStore';
+import ResizableItem from './components/ResizableItem';
+import useWindowResize from '../src/hooks/useWindowResize';
 
 const exampleItems: GalleryItem[] = [
   {
@@ -8,7 +11,6 @@ const exampleItems: GalleryItem[] = [
     alt: 'Workspace with laptop and coffee',
     width: 1600,
     height: 1067,
-    colSpan: 2,
   },
   {
     id: 2,
@@ -65,8 +67,6 @@ const exampleItems: GalleryItem[] = [
     alt: 'Mountain landscape',
     width: 1600,
     height: 1067,
-    colSpan: 2,
-    rowSpan: 2,
   },
   {
     id: 20,
@@ -74,7 +74,6 @@ const exampleItems: GalleryItem[] = [
     alt: 'Desert sunset',
     width: 1600,
     height: 2400,
-    colSpan: 2,
   },
   {
     id: 30,
@@ -82,7 +81,6 @@ const exampleItems: GalleryItem[] = [
     alt: 'Valley view',
     width: 1600,
     height: 1067,
-    rowSpan: 2,
   },
   {
     id: 9,
@@ -426,6 +424,13 @@ const ExampleGallery: React.FC = () => {
   const [layout, setLayout] = useState<GalleryLayout>('grid');
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [lazyLoad, setLazyLoad] = useState<boolean>(true);
+  const [devMode, setDevMode] = useState<boolean>(true);
+  const { items, setItems, isDragging } = useGalleryStore();
+  const windowSize = useWindowResize();
+  // Initialize store with example items
+  useEffect(() => {
+    setItems(exampleItems);
+  }, [setItems]);
 
   const layoutOptions: GalleryLayoutOptions = {
     masonry: {
@@ -443,7 +448,6 @@ const ExampleGallery: React.FC = () => {
         default: 2,
       },
       gutter: 16,
-      itemHeight: "100%",
     },
     stack: {
       columns: {
@@ -454,9 +458,9 @@ const ExampleGallery: React.FC = () => {
       gutter: 16,
       maxWidth: '100%',
       alignment: 'flex-end',
-      // Stack layout is similar to grid but with automatic height that preserves aspect ratio
     },
     justified: {
+      
       targetRowHeight: 200,
       maxRowHeight: 300,
       containerPadding: 16,
@@ -464,14 +468,34 @@ const ExampleGallery: React.FC = () => {
     },
   };
 
+  // Custom render function using our ResizableItem component
+  const renderResizableItem = useCallback((item: GalleryItem, index: number, windowSize: WindowSize, gutter: GalleryGutter, columns: GalleryColumns) => {
+    return (
+      <ResizableItem
+        item={item}
+        index={index}
+        lazyLoad={lazyLoad}
+        devMode={devMode}
+        wrapperSelector=".gallery-wrapper"
+        columns={getColumnsCount(columns, windowSize)}
+        gutter={getGutter(gutter, windowSize)}
+        resizeDirectionAllowed={['right']}
+      />
+    );
+  }, [lazyLoad, devMode]);
+
+  const handleItemClick = (item: GalleryItem, index: number) => {
+    setSelectedItem(item);
+  };
+
   const showSpanExplanation = () => {
     return (
       <div className="span-explanation">
-        <p>Notice how some items span multiple columns or rows:</p>
+        <p>Use the corners to resize gallery items:</p>
         <ul>
-          <li>Items with <strong>colSpan: 2</strong> take up two columns</li>
-          <li>Items with <strong>rowSpan: 2</strong> take up two rows</li>
-          <li>Items can have both colSpan and rowSpan</li>
+          <li>Top-left and top-right: Change colSpan</li>
+          <li>Bottom-left and bottom-right: Change rowSpan</li>
+          <li>Drag any corner to change both dimensions</li>
         </ul>
       </div>
     );
@@ -479,7 +503,7 @@ const ExampleGallery: React.FC = () => {
 
   return (
     <div className="example-gallery-container">
-      <h1>Gallery Layouts Example</h1>
+      <h1>Interactive Gallery Layouts</h1>
       
       <div className="layout-selector">
         <p>Select a layout:</p>
@@ -519,23 +543,31 @@ const ExampleGallery: React.FC = () => {
             />
             Enable lazy loading
           </label>
+          <label style={{ marginLeft: '20px' }}>
+            <input 
+              type="checkbox" 
+              checked={devMode} 
+              onChange={() => setDevMode(!devMode)}
+            />
+            Developer Mode
+          </label>
         </div>
 
-        {showSpanExplanation()}
+        {devMode && showSpanExplanation()}
       </div>
       
       <div className="gallery-wrapper">
         <Gallery
-          items={exampleItems}
+          items={items.slice(0, 10)}
           layout={layout}
           layoutOptions={layoutOptions}
-          onItemClick={(item) => setSelectedItem(item)}
+          renderItem={layout !== 'justified' ? (item, index) => renderResizableItem(item, index, windowSize, layoutOptions[layout]?.gutter!, layoutOptions[layout]?.columns!) : undefined}
           itemClassName="gallery-item"
           lazyLoad={lazyLoad}
         />
       </div>
-      
-      {selectedItem && (
+{/*       
+      {selectedItem && !isDragging && (
         <div className="modal" onClick={() => setSelectedItem(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <span className="close" onClick={() => setSelectedItem(null)}>&times;</span>
@@ -544,16 +576,14 @@ const ExampleGallery: React.FC = () => {
               alt={selectedItem.alt || 'Gallery image'} 
             />
             <p>{selectedItem.alt}</p>
-            {(selectedItem.colSpan || selectedItem.rowSpan) && (
-              <p className="span-info">
-                {selectedItem.colSpan && `Column Span: ${selectedItem.colSpan}`}
-                {selectedItem.colSpan && selectedItem.rowSpan && ' | '}
-                {selectedItem.rowSpan && `Row Span: ${selectedItem.rowSpan}`}
-              </p>
-            )}
+            <p className="span-info">
+              Column Span: {selectedItem.colSpan || 1} | 
+              Row Span: {selectedItem.rowSpan || 1}
+            </p>
           </div>
         </div>
-      )}
+      )} */}
+
     </div>
   );
 };

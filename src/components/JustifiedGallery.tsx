@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { JustifiedGalleryProps, GalleryItem } from '../types';
-import { normalizeItems, calculateWidth } from '../utils';
+import { normalizeItems, calculateWidth, getGutter } from '../utils';
+import useWindowResize from '../hooks/useWindowResize';
 
 interface RowItem extends GalleryItem {
   calculatedWidth: number;
@@ -27,8 +28,9 @@ const JustifiedGallery: React.FC<JustifiedGalleryProps> = ({
   onItemClick,
   lazyLoad = false,
 }) => {
+  const windowSize = useWindowResize();
   const normalizedItems = useMemo(() => normalizeItems(items), [items]);
-  
+  const gutterSize = useMemo(() => getGutter(gutter, windowSize), [gutter, windowSize]);
   // Calculate rows - handle colSpan by adjusting aspect ratio
   const rows = useMemo(() => {
     if (!containerWidth) {
@@ -59,9 +61,9 @@ const JustifiedGallery: React.FC<JustifiedGalleryProps> = ({
       };
       
       // If adding this item would exceed available width, complete the row
-      if (currentRow.length > 0 && currentRowWidth + itemWidth + (gutter * currentRow.length) > availableWidth) {
+      if (currentRow.length > 0 && currentRowWidth + itemWidth + (gutterSize * currentRow.length) > availableWidth) {
         // Calculate scaling factor to fit items in the row
-        const rowWidth = currentRowWidth + (gutter * (currentRow.length - 1));
+        const rowWidth = currentRowWidth + (gutterSize * (currentRow.length - 1));
         const scaleFactor = Math.min(availableWidth / rowWidth, maxRowHeight / targetRowHeight);
         
         // Scale items to fit
@@ -88,7 +90,7 @@ const JustifiedGallery: React.FC<JustifiedGalleryProps> = ({
     
     // Handle last row
     if (currentRow.length > 0) {
-      const rowWidth = currentRowWidth + (gutter * (currentRow.length - 1));
+      const rowWidth = currentRowWidth + (gutterSize * (currentRow.length - 1));
       
       // For the last row, we can either justify it or left-align it
       // Here we're opting to justify it like other rows for consistency
@@ -134,9 +136,10 @@ const JustifiedGallery: React.FC<JustifiedGalleryProps> = ({
       {rows.map((row, rowIndex) => (
         <div 
           key={`row-${rowIndex}`}
+          className={`justified-gallery-row`}
           style={{ 
             display: 'flex',
-            marginBottom: rowIndex < rows.length - 1 ? gutter : 0,
+            marginBottom: rowIndex < rows.length - 1 ? gutterSize : 0,
           }}
         >
           {row.items.map((item, itemIndex) => {
@@ -148,7 +151,7 @@ const JustifiedGallery: React.FC<JustifiedGalleryProps> = ({
                 style={{
                   width: item.calculatedWidth,
                   height: item.calculatedHeight,
-                  marginRight: itemIndex < row.items.length - 1 ? gutter : 0,
+                  marginRight: itemIndex < row.items.length - 1 ? gutterSize : 0,
                   ...itemStyle,
                 }}
                 onClick={onItemClick ? () => onItemClick(item, itemIndex) : undefined}
