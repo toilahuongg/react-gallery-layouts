@@ -220,23 +220,111 @@ This responsive configuration is available for all layout types (Grid, Masonry, 
 
 ## Custom Item Rendering
 
-You can provide a custom renderer for gallery items:
+You can provide a custom renderer for gallery items. The `renderItem` prop receives the item data and index, and should return a React node:
 
 ```tsx
+interface GalleryItem {
+  id?: string | number;
+  src: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+  colSpan?: number;
+  // ... any additional custom properties
+}
+
+// Basic example with image only
+const defaultRenderItem = (item: GalleryItem, index: number) => (
+  <img 
+    src={item.src} 
+    alt={item.alt || `Gallery item ${index}`}
+    loading="lazy"
+    style={{ 
+      width: '100%', 
+      height: '100%',
+      objectFit: 'cover',
+      display: 'block',
+    }} 
+  />
+);
+
+// Advanced example with overlay and additional content
 const renderItem = (item: GalleryItem, index: number) => (
   <div className="custom-item">
-    <img src={item.src} alt={item.alt} />
+    <img 
+      src={item.src} 
+      alt={item.alt} 
+      loading="lazy"
+      style={{ 
+        width: '100%', 
+        height: '100%',
+        objectFit: 'cover',
+      }}
+    />
     <div className="overlay">
       <h3>{item.title}</h3>
       <p>{item.description}</p>
+      <div className="actions">
+        <button onClick={() => handleLike(item)}>Like</button>
+        <button onClick={() => handleShare(item)}>Share</button>
+      </div>
     </div>
   </div>
 );
 
+// Usage in Gallery component
 <Gallery
   items={items}
-  renderItem={renderItem}
+  renderItem={renderItem}  // Custom renderer
+  // or
+  renderItem={defaultRenderItem}  // Default renderer
 />
+```
+
+The renderItem function has access to:
+- All properties of the GalleryItem
+- The item's index in the gallery
+- The full context of the gallery layout
+
+Best practices for custom rendering:
+- Always maintain the aspect ratio of the container
+- Use `width: 100%` and `height: 100%` for the main image
+- Set `objectFit: 'cover'` for proper image scaling
+- Consider using `loading="lazy"` for better performance
+- Handle image loading states and errors appropriately
+
+Example with loading and error states:
+
+```tsx
+const renderItem = (item: GalleryItem, index: number) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
+  return (
+    <div className="gallery-item">
+      {isLoading && <div className="loading-placeholder" />}
+      {hasError && <div className="error-placeholder">Failed to load image</div>}
+      <img 
+        src={item.src} 
+        alt={item.alt || `Gallery item ${index}`}
+        loading="lazy"
+        style={{ 
+          width: '100%', 
+          height: '100%',
+          objectFit: 'cover',
+          display: hasError ? 'none' : 'block',
+          opacity: isLoading ? 0 : 1,
+          transition: 'opacity 0.3s ease-in-out',
+        }}
+        onLoad={() => setIsLoading(false)}
+        onError={() => {
+          setIsLoading(false);
+          setHasError(true);
+        }}
+      />
+    </div>
+  );
+};
 ```
 
 ## Styling

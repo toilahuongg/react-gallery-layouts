@@ -1,17 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Gallery, GalleryColumns, GalleryGutter, GalleryItem, GalleryLayout, GalleryLayoutOptions, WindowSize } from '../src';
-import useWindowResize from '../src/hooks/useWindowResize';
+import { Gallery, GalleryItem, GalleryLayout, GalleryLayoutOptions } from '../src';
 import ResizableItem from './components/ResizableItem-v2';
-import { useGalleryStore } from './store/galleryStore';
 import { fakeImages } from './fake-data';
+import { useGalleryStore } from './store/galleryStore';
 
 const ExampleGallery: React.FC = () => {
   const [layout, setLayout] = useState<GalleryLayout>('grid');
-  const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [lazyLoad, setLazyLoad] = useState<boolean>(true);
   const [devMode, setDevMode] = useState<boolean>(true);
-  const { items, setItems, isDragging } = useGalleryStore();
-  const windowSize = useWindowResize();
+  const { items, setItems } = useGalleryStore();
   // Initialize store with example items
   useEffect(() => {
     setItems(fakeImages);
@@ -55,24 +52,17 @@ const ExampleGallery: React.FC = () => {
   };
 
   // Custom render function using our ResizableItem component
-  const renderResizableItem = useCallback((item: GalleryItem, index: number, windowSize: WindowSize, gutter: GalleryGutter, columns: GalleryColumns) => {
+  const renderResizableItem = useCallback((item: GalleryItem, lazyLoad: boolean, index: number) => {
     return (
       <ResizableItem
         item={item}
         index={index}
         lazyLoad={lazyLoad}
         devMode={devMode}
-        // wrapperSelector=".gallery-wrapper"
-        // columns={getColumnsCount(columns, windowSize)}
-        // gutter={getGutter(gutter, windowSize)}
         resizeDirectionAllowed={['left', 'right', 'top', 'bottom']}
       />
     );
   }, [lazyLoad, devMode]);
-
-  const handleItemClick = (item: GalleryItem, index: number) => {
-    setSelectedItem(item);
-  };
 
   const showSpanExplanation = () => {
     return (
@@ -147,7 +137,7 @@ const ExampleGallery: React.FC = () => {
           items={items}
           layout={layout}
           layoutOptions={layoutOptions}
-          renderItem={layout !== 'justified' ? (item, index) => renderResizableItem(item, index, windowSize, layoutOptions[layout]?.gutter!, layoutOptions[layout]?.columns!) : undefined}
+          renderItem={layout !== 'justified' ? (item, lazyLoad, index) => renderResizableItem(item, lazyLoad, index) : undefined}
           itemClassName="gallery-item"
           lazyLoad={lazyLoad}
         />

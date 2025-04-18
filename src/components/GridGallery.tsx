@@ -13,7 +13,7 @@ interface GridGalleryItemProps {
   itemWidth: number;
   itemStyle?: React.CSSProperties;
   onItemClick?: (item: GalleryItem, index: number) => void;
-  renderItem?: (item: GalleryItem, index: number) => React.ReactNode;
+  renderItem?: (item: GalleryItem, lazyLoad: boolean, index: number) => React.ReactNode;
   lazyLoad?: boolean;
 }
 
@@ -67,7 +67,7 @@ const GridGalleryItem: React.FC<GridGalleryItemProps> = ({
       onClick={onItemClick ? () => onItemClick(item, index) : undefined}
     >
       {renderItem
-        ? renderItem(item, index)
+        ? renderItem(item, lazyLoad, index)
         : defaultRenderItem(item, index)
       }
     </div>

@@ -74,7 +74,7 @@ const StackGallery: React.FC<StackGalleryProps> = ({
             onClick={onItemClick ? () => onItemClick(item, index) : undefined}
           >
             {renderItem
-              ? renderItem(item, index)
+              ? renderItem(item, lazyLoad, index)
               : defaultRenderItem(item, index)
             }
           </div>

@@ -89,7 +89,7 @@ export interface BaseGalleryProps {
    * @param index - The index of the item in the array
    * @returns A React node to render
    */
-  renderItem?: (item: GalleryItem, index: number) => ReactNode;
+  renderItem?: (item: GalleryItem, lazyLoad: boolean, index: number) => ReactNode;
   
   /**
    * CSS class for the gallery container

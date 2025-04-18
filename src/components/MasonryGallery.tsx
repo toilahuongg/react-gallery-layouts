@@ -135,7 +135,7 @@ const MasonryGallery: React.FC<MasonryGalleryProps> = ({
             onClick={onItemClick ? () => onItemClick(item, index) : undefined}
           >
             {renderItem 
-              ? renderItem(item, index) 
+              ? renderItem(item, lazyLoad, index) 
               : defaultRenderItem(item, index)
             }
           </div>

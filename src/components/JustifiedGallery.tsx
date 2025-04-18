@@ -157,7 +157,7 @@ const JustifiedGallery: React.FC<JustifiedGalleryProps> = ({
                 onClick={onItemClick ? () => onItemClick(item, itemIndex) : undefined}
               >
                 {renderItem 
-                  ? renderItem(item, itemIndex) 
+                  ? renderItem(item, lazyLoad, itemIndex) 
                   : defaultRenderItem(item, itemIndex)
                 }
               </div>
