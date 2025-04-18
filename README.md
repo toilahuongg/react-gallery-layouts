@@ -158,6 +158,66 @@ layoutOptions={{
 }}
 ```
 
+### Responsive Configuration
+
+Both `columns` and `gutter` support responsive configuration using breakpoints. You can specify different values for different screen sizes:
+
+```tsx
+layoutOptions={{
+  masonry: {
+    // Responsive columns
+    columns: {
+      default: 2,      // Default: 2 columns (screen < 768px)
+      768: 3,         // Tablet: 3 columns (768px <= screen < 1024px)
+      1024: 4,        // Desktop: 4 columns (1024px <= screen < 1440px)
+      1440: 5         // Large Desktop: 5 columns (screen >= 1440px)
+    },
+    // Responsive gutter
+    gutter: {
+      default: 10,    // Default: 10px gap (screen < 768px)
+      768: 15,        // Tablet: 15px gap (768px <= screen < 1024px)
+      1024: 20,       // Desktop: 20px gap (1024px <= screen < 1440px)
+      1440: 25        // Large Desktop: 25px gap (screen >= 1440px)
+    }
+  }
+}}
+```
+
+The breakpoints system works as follows:
+- Use `default` for the base value (smallest screens)
+- Add breakpoint values in pixels for larger screens
+- Values are applied when screen width is >= breakpoint
+- Breakpoints are automatically sorted in ascending order
+
+Example of how responsive values are applied:
+
+```tsx
+// For a screen width of 1200px:
+
+// Simple number
+columns={3}  // Always 3 columns
+
+// Responsive object
+columns={{
+  default: 2,  // < 768px
+  768: 3,      // >= 768px
+  1024: 4,     // >= 1024px
+  1440: 5      // >= 1440px
+}}
+// Will use 4 columns (matches 1024 breakpoint)
+
+// Same applies for gutter spacing
+gutter={{
+  default: 10,
+  768: 15,
+  1024: 20,
+  1440: 25
+}}
+// Will use 20px gutter (matches 1024 breakpoint)
+```
+
+This responsive configuration is available for all layout types (Grid, Masonry, Stack, Justified).
+
 ## Custom Item Rendering
 
 You can provide a custom renderer for gallery items:

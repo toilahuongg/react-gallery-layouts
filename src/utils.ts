@@ -80,6 +80,10 @@ export const getGutter = (gutter: GalleryGutter = 10, windowSize: WindowSize): n
   if (typeof gutter === 'number') {
     return gutter;
   }
+  // for SSR, return a default value
+  if (typeof window === 'undefined') {
+    return gutter.default || 10;
+  }
 
   const breakpoints = Object.keys(gutter)
     .filter(breakpoint => breakpoint !== 'default')
