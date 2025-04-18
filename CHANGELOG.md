@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Added containerWidth prop to MasonryGallery component
+- Added aspectRatio support to GridGallery component
+  - Support for global aspectRatio prop
+  - Support for individual item aspectRatio
+  - Automatic height calculation based on aspect ratio
+  - Fallback to fixed height when aspect ratio is not specified 
+
+### Changed
+- Rewrote MasonryGallery layout algorithm to use absolute positioning
+- Improved MasonryGallery performance with pixel-based calculations
+- Enhanced MasonryGallery responsive behavior
+- Optimized MasonryGallery gutter handling
+
 ## [0.2.7] - 2025-04-18
 
 ### Added
@@ -22,7 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed MasonryGallery layout issues
-
 
 ## [0.2.2] - 2025-04-18
 

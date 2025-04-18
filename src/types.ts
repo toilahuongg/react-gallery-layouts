@@ -1,4 +1,4 @@
-import { CSSProperties, HTMLAttributes, ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
 /**
  * Available gallery layout types
@@ -133,6 +133,10 @@ export interface BaseGalleryProps {
  * Properties for the Masonry Gallery component
  */
 export interface MasonryGalleryProps extends BaseGalleryProps {
+  /**
+   * Width of the container in pixels
+   */
+  containerWidth: number;
   /**
    * Number of columns to display
    * Can be a fixed number or an object with breakpoints

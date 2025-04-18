@@ -60,6 +60,7 @@ const Gallery: React.FC<GalleryProps> = ({
         return (
           <MasonryGallery
             {...commonProps}
+            containerWidth={containerWidth}
             columns={layoutOptions.masonry?.columns}
             gutter={layoutOptions.masonry?.gutter}
           />
@@ -99,6 +100,7 @@ const Gallery: React.FC<GalleryProps> = ({
         return (
           <MasonryGallery
             {...commonProps}
+            containerWidth={containerWidth}
             columns={layoutOptions.masonry?.columns}
             gutter={layoutOptions.masonry?.gutter}
           />

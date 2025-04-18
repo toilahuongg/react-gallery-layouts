@@ -13,6 +13,7 @@ A modern, responsive gallery library built with React and TypeScript, supporting
 - 📚 Comprehensive documentation
 - 🧪 Example implementation
 - 📏 Aspect ratio control
+- 📐 Pixel-perfect layout calculations
 
 ## Installation
 
@@ -41,7 +42,8 @@ const MyGallery = () => {
       layoutOptions={{
         masonry: {
           columns: 3,
-          gutter: 10
+          gutter: 10,
+          containerWidth: 1200 // Optional fixed container width
         }
       }}
       lazyLoad={true}
@@ -78,27 +80,17 @@ Options:
 | gutter | `number \| { [breakpoint: number]: number }` | `10` | Space between items in pixels |
 | itemHeight | `number` | `200` | Fixed height for all items |
 | aspectRatio | `number` | `undefined` | Fixed aspect ratio for items (width/height) |
-
-Example:
-
-```tsx
-layoutOptions={{
-  grid: {
-    columns: 3,        // Number of columns
-    gutter: 10,        // Space between items
-    itemHeight: 200    // Fixed height for items
-  }
-}}
-```
+| containerWidth | `number` | `undefined` | Fixed container width in pixels |
 
 #### Masonry Layout
-The Masonry layout arranges items in a grid with variable-sized columns. Each item can optionally span multiple columns using `colSpan` property.
+The Masonry layout arranges items in a grid with variable-sized columns. Each item can optionally span multiple columns using `colSpan` property. The layout uses absolute positioning for optimal performance and precise control.
 
 Options:
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | columns | `number \| { [breakpoint: number]: number }` | `3` | Number of columns, can be responsive |
 | gutter | `number \| { [breakpoint: number]: number }` | `10` | Space between items in pixels |
+| containerWidth | `number` | `undefined` | Fixed container width in pixels |
 
 Example:
 
@@ -106,7 +98,8 @@ Example:
 layoutOptions={{
   masonry: {
     columns: 3,        // Number of columns
-    gutter: 10         // Space between items
+    gutter: 10,        // Space between items
+    containerWidth: 1200 // Optional fixed container width
   }
 }}
 ```

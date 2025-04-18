@@ -5,6 +5,7 @@ import useWindowResize from '../hooks/useWindowResize';
 
 const MasonryGallery: React.FC<MasonryGalleryProps> = ({
   items,
+  containerWidth,
   columns = 3,
   gutter = 10,
   renderItem,
@@ -19,80 +20,71 @@ const MasonryGallery: React.FC<MasonryGalleryProps> = ({
   const windowSize = useWindowResize();
   const columnsCount = useMemo(() => getColumnsCount(columns, windowSize), [columns, windowSize]);
   const gutterSize = useMemo(() => getGutter(gutter, windowSize), [gutter, windowSize]);
-  
-  const gridItems = useMemo(() => {
-    // Create grid layout with positions for each item
-    const grid: Array<Array<number | null>> = [];
-    const itemsWithPosition: Array<GalleryItem & { 
-      gridRow: number; 
-      gridColumn: number; 
-      gridRowSpan: number; 
-      gridColumnSpan: number;
-    }> = [];
-    
-    // Keep track of the current height of each column
-    const columnHeights = Array(columnsCount).fill(0);
-    
-    // Sort items by colSpan (larger items first) for better distribution
-    const sortedItems = [...normalizedItems].sort((a, b) => (b.colSpan || 1) - (a.colSpan || 1));
-    
-    sortedItems.forEach((item, index) => {
+
+  const { itemsWithPosition, containerHeight } = useMemo(() => {
+    // Khởi tạo mảng theo dõi chiều cao các cột
+    const colYs: number[] = Array(columnsCount).fill(0);
+    let maxY = 0;
+
+    // Tính toán kích thước cột và gutter
+    const availableWidth = containerWidth || windowSize.width;
+    const columnWidth = Math.floor((availableWidth - (columnsCount - 1) * gutterSize) / columnsCount);
+    const effectiveGutter = gutterSize;
+
+    const itemsWithPosition = normalizedItems.map((item) => {
+      // Tính toán số cột mà item sẽ chiếm
       const colSpan = Math.min(item.colSpan || 1, columnsCount);
       
-      // Find the best position for this item
-      let bestColumn = 0;
-      let lowestHeight = Infinity;
-      
-      // For items with colSpan > 1, find consecutive columns with lowest max height
-      if (colSpan > 1) {
-        for (let i = 0; i <= columnsCount - colSpan; i++) {
-          const maxHeightInSpan = Math.max(...columnHeights.slice(i, i + colSpan));
-          if (maxHeightInSpan < lowestHeight) {
-            lowestHeight = maxHeightInSpan;
-            bestColumn = i;
-          }
+      // Tìm vị trí tốt nhất cho item
+      let bestCol = 0;
+      let minY = Infinity;
+
+      // Tìm nhóm cột có chiều cao thấp nhất
+      for (let col = 0; col <= columnsCount - colSpan; col++) {
+        const groupHeight = Math.max(...colYs.slice(col, col + colSpan));
+        if (groupHeight < minY) {
+          minY = groupHeight;
+          bestCol = col;
         }
-      } else {
-        // For single column items, find the shortest column
-        bestColumn = columnHeights.indexOf(Math.min(...columnHeights));
-        lowestHeight = columnHeights[bestColumn];
       }
+
+      // Tính toán chiều cao dựa trên tỷ lệ khung hình
+      const aspectRatio = item.height && item.width 
+        ? item.height / item.width 
+        : 1; // Fallback ratio
       
-      // Calculate height based on aspect ratio and column span
-      const aspectRatio = (item.height || 100) / (item.width || 100);
-      // Calculate the actual height in grid units based on column span
-      const height = Math.max(1, Math.round(aspectRatio * colSpan * 10));
-      
-      // Add item to the grid with position information
-      itemsWithPosition.push({
+      const itemWidth = (columnWidth * colSpan) + ((colSpan - 1) * effectiveGutter);
+      const height = Math.round(aspectRatio * columnWidth);
+
+      // Cập nhật chiều cao cho các cột bị ảnh hưởng
+      for (let col = bestCol; col < bestCol + colSpan; col++) {
+        colYs[col] = minY + height + effectiveGutter;
+      }
+
+      // Cập nhật maxY
+      maxY = Math.max(maxY, minY + height + effectiveGutter);
+
+      // Tính toán vị trí tuyệt đối
+      const left = bestCol * (columnWidth + effectiveGutter);
+      const top = minY;
+
+      return {
         ...item,
-        gridRow: lowestHeight + 1,
-        gridColumn: bestColumn + 1,
-        gridRowSpan: height,
-        gridColumnSpan: colSpan
-      });
-      
-      // Update column heights
-      for (let i = bestColumn; i < bestColumn + colSpan; i++) {
-        if (i < columnsCount) {
-          columnHeights[i] = lowestHeight + height;
-        }
-      }
-      
-      // Update the grid representation
-      for (let i = lowestHeight; i < lowestHeight + height; i++) {
-        if (!grid[i]) grid[i] = Array(columnsCount).fill(null);
-        for (let j = bestColumn; j < bestColumn + colSpan; j++) {
-          if (j < columnsCount) {
-            grid[i][j] = index;
-          }
-        }
-      }
+        position: {
+          left: `${left}px`,
+          top: `${top}px`,
+          width: `${itemWidth}px`,
+          height: `${height}px`,
+        },
+      };
     });
-    
-    return itemsWithPosition;
-  }, [normalizedItems, columnsCount]);
-  
+
+    return {
+      itemsWithPosition,
+      containerHeight: maxY,
+    };
+  }, [normalizedItems, columnsCount, gutterSize, containerWidth, windowSize.width]);
+
   const defaultRenderItem = (item: GalleryItem, index: number) => (
     <img 
       src={item.src} 
@@ -111,14 +103,13 @@ const MasonryGallery: React.FC<MasonryGalleryProps> = ({
     <div 
       className={`masonry-gallery ${className}`}
       style={{ 
-        display: 'grid',
-        gridTemplateColumns: `repeat(${columnsCount}, 1fr)`,
-        gap: gutterSize,
         position: 'relative',
+        height: `${containerHeight}px`,
+        width: containerWidth ? `${containerWidth}px` : '100%',
         ...style 
       }}
     >
-      {gridItems.map((item, index) => {
+      {itemsWithPosition.map((item, index) => {
         const itemKey = item.id || `item-${index}`;
         
         return (
@@ -126,10 +117,9 @@ const MasonryGallery: React.FC<MasonryGalleryProps> = ({
             key={itemKey}
             className={`masonry-gallery-item ${itemClassName}`}
             style={{
-              gridColumn: `${item.gridColumn} / span ${item.gridColumnSpan}`,
-              gridRow: `${item.gridRow} / span ${item.gridRowSpan}`,
-              position: 'relative',
-              overflow: 'hidden',
+              position: 'absolute',
+              ...item.position,
+              boxSizing: 'border-box',
               ...itemStyle,
             }}
             onClick={onItemClick ? () => onItemClick(item, index) : undefined}
@@ -145,4 +135,4 @@ const MasonryGallery: React.FC<MasonryGalleryProps> = ({
   );
 };
 
-export default MasonryGallery; 
+export default MasonryGallery;
