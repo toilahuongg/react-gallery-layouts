@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { GridGalleryProps, GalleryItem } from '../types';
 import { getColumnsCount, getGutter } from '../utils';
 import useWindowResize from '../hooks/useWindowResize';
+import '../styles/gallery.css';
 
 interface GridGalleryItemProps {
   item: GalleryItem;
@@ -45,22 +46,15 @@ const GridGalleryItem: React.FC<GridGalleryItemProps> = ({
       src={item.src}
       alt={item.alt || `Gallery item ${index}`}
       loading={lazyLoad ? "lazy" : undefined}
-      style={{
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-        display: 'block',
-      }}
     />
   );
 
   return (
     <div
-      className={`grid-gallery-item ${itemClassName}`}
+      className={`gallery-item gallery-item-grid ${itemClassName}`}
       style={{
         gridColumn: `span ${colSpan}`,
         gridRow: `span ${rowSpan}`,
-        overflow: 'hidden',
         height: $itemHeight * rowSpan + gutterSize * (rowSpan - 1),
         ...itemStyle,
       }}
@@ -98,9 +92,8 @@ const GridGallery: React.FC<GridGalleryProps> = ({
 
   return (
     <div
-      className={`grid-gallery ${className}`}
+      className={`gallery-layout layout-grid ${className}`}
       style={{
-        display: 'grid',
         gridTemplateColumns: `repeat(${columnsCount}, 1fr)`,
         gap: gutterSize,
         ...style

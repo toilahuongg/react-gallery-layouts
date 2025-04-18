@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { JustifiedGalleryProps, GalleryItem } from '../types';
 import { normalizeItems, calculateWidth, getGutter } from '../utils';
 import useWindowResize from '../hooks/useWindowResize';
+import '../styles/gallery.css';
 
 interface RowItem extends GalleryItem {
   calculatedWidth: number;
@@ -116,18 +117,12 @@ const JustifiedGallery: React.FC<JustifiedGalleryProps> = ({
       src={item.src} 
       alt={item.alt || `Gallery item ${index}`}
       loading={lazyLoad ? "lazy" : undefined}
-      style={{ 
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-        display: 'block',
-      }} 
     />
   );
 
   return (
     <div 
-      className={`justified-gallery ${className}`}
+      className={`gallery-layout layout-justified ${className}`}
       style={{ 
         padding: containerPadding,
         ...style 
@@ -136,9 +131,8 @@ const JustifiedGallery: React.FC<JustifiedGalleryProps> = ({
       {rows.map((row, rowIndex) => (
         <div 
           key={`row-${rowIndex}`}
-          className={`justified-gallery-row`}
+          className={`gallery-row`}
           style={{ 
-            display: 'flex',
             marginBottom: rowIndex < rows.length - 1 ? gutterSize : 0,
           }}
         >
@@ -147,7 +141,7 @@ const JustifiedGallery: React.FC<JustifiedGalleryProps> = ({
             return (
               <div 
                 key={itemKey}
-                className={`justified-gallery-item ${itemClassName}`}
+                className={`gallery-item gallery-item-justified ${itemClassName}`}
                 style={{
                   width: item.calculatedWidth,
                   height: item.calculatedHeight,

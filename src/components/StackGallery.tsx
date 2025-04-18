@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { StackGalleryProps, GalleryItem } from '../types';
 import { getColumnsCount, normalizeItems, getGutter } from '../utils';
 import useWindowResize from '../hooks/useWindowResize';
+import '../styles/gallery.css';
 
 const StackGallery: React.FC<StackGalleryProps> = ({
   items,
@@ -29,21 +30,14 @@ const StackGallery: React.FC<StackGalleryProps> = ({
       src={item.src}
       alt={item.alt || `Gallery item ${index}`}
       loading={lazyLoad ? "lazy" : undefined}
-      style={{
-        width: '100%',
-        height: 'auto', // Auto height to preserve aspect ratio
-        display: 'block',
-      }}
     />
   );
 
   return (
     <div
-      className={`stack-gallery ${className}`}
+      className={`gallery-layout layout-stack ${className}`}
       style={{
         width: maxWidth,
-        display: 'flex',
-        flexWrap: 'wrap',
         gap: gutterSize,
         alignItems: alignment,
         ...style
@@ -60,10 +54,9 @@ const StackGallery: React.FC<StackGalleryProps> = ({
         return (
           <div
             key={itemKey}
-            className={`stack-gallery-item ${itemClassName}`}
+            className={`gallery-item gallery-item-stack ${itemClassName}`}
             style={{
               width: '100%',
-              overflow: 'hidden',
               height: rowSpan > 1 ? `calc(100% + ${gutterSize}px * ${rowSpan - 1})` : '100%',
               flexBasis: itemWidth,
               flexGrow: 0,

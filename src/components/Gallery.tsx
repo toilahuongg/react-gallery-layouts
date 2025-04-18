@@ -4,8 +4,7 @@ import GridGallery from './GridGallery';
 import JustifiedGallery from './JustifiedGallery';
 import MasonryGallery from './MasonryGallery';
 import StackGallery from './StackGallery';
-
-
+import '../styles/gallery.css';
 
 const Gallery: React.FC<GalleryProps> = ({
   items,
@@ -112,10 +111,7 @@ const Gallery: React.FC<GalleryProps> = ({
     <div
       ref={containerRef}
       className={`gallery-container ${className}`}
-      style={{
-        width: '100%',
-        ...style,
-      }}
+      style={style}
     >
       {renderGallery()}
     </div>

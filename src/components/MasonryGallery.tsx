@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { MasonryGalleryProps, GalleryItem } from '../types';
 import { normalizeItems, getColumnsCount, getGutter } from '../utils';
 import useWindowResize from '../hooks/useWindowResize';
+import '../styles/gallery.css';
 
 const MasonryGallery: React.FC<MasonryGalleryProps> = ({
   items,
@@ -90,20 +91,13 @@ const MasonryGallery: React.FC<MasonryGalleryProps> = ({
       src={item.src} 
       alt={item.alt || `Gallery item ${index}`}
       loading={lazyLoad ? "lazy" : undefined}
-      style={{ 
-        width: '100%', 
-        height: '100%',
-        objectFit: 'cover',
-        display: 'block',
-      }} 
     />
   );
 
   return (
     <div 
-      className={`masonry-gallery ${className}`}
+      className={`gallery-layout layout-masonry ${className}`}
       style={{ 
-        position: 'relative',
         height: `${containerHeight}px`,
         width: containerWidth ? `${containerWidth}px` : '100%',
         ...style 
@@ -115,11 +109,10 @@ const MasonryGallery: React.FC<MasonryGalleryProps> = ({
         return (
           <div 
             key={itemKey}
-            className={`masonry-gallery-item ${itemClassName}`}
+            className={`gallery-item gallery-item-masonry ${itemClassName}`}
             style={{
               position: 'absolute',
               ...item.position,
-              boxSizing: 'border-box',
               ...itemStyle,
             }}
             onClick={onItemClick ? () => onItemClick(item, index) : undefined}

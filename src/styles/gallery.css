@@ -1,0 +1,38 @@
+.gallery-container {
+  width: 100%;
+}
+
+.gallery-layout {
+  position: relative;
+}
+
+.gallery-item {
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Layout specific styles */
+.layout-masonry {
+  position: relative;
+}
+
+.layout-grid {
+  display: grid;
+}
+
+.layout-justified {
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-stack {
+  display: flex;
+  flex-wrap: wrap;
+} 
