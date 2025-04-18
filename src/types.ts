@@ -154,6 +154,10 @@ export interface MasonryGalleryProps extends BaseGalleryProps {
  */
 export interface GridGalleryProps extends BaseGalleryProps {
   /**
+   * Width of the container in pixels
+   */
+  containerWidth: number;
+  /**
    * Number of columns to display
    * Can be a fixed number or an object with breakpoints
    * @example { 768: 2, 1024: 3, default: 1 }

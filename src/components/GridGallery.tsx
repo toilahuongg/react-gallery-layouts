@@ -10,6 +10,7 @@ interface GridGalleryItemProps {
   aspectRatio?: number;
   gutterSize: number;
   itemClassName?: string;
+  itemWidth: number;
   itemStyle?: React.CSSProperties;
   onItemClick?: (item: GalleryItem, index: number) => void;
   renderItem?: (item: GalleryItem, index: number) => React.ReactNode;
@@ -24,25 +25,20 @@ const GridGalleryItem: React.FC<GridGalleryItemProps> = ({
   gutterSize,
   itemClassName = '',
   itemStyle = {},
+  itemWidth,
   onItemClick,
   renderItem,
   lazyLoad = false,
 }) => {
-  const itemRef = useRef<HTMLDivElement>(null);
   const colSpan = item.colSpan || 1;
   const rowSpan = item.rowSpan || 1;
 
   const [$itemHeight, setItemHeight] = useState(itemHeight);
 
   useEffect(() => {
-    if (itemRef.current) {
-      const itemElement = itemRef.current;
-      const itemWidth = itemElement.clientWidth;
-      // Use item's own aspectRatio if available, otherwise use the global aspectRatio
-      const effectiveAspectRatio = item.aspectRatio || aspectRatio;
-      setItemHeight(effectiveAspectRatio ? itemWidth / effectiveAspectRatio : itemHeight);
-    }
-  }, [itemRef, itemHeight, aspectRatio, item.aspectRatio]);
+    const effectiveAspectRatio = item.aspectRatio || aspectRatio;
+    setItemHeight(effectiveAspectRatio ? itemWidth / effectiveAspectRatio : itemHeight);
+  }, [itemHeight, aspectRatio, item.aspectRatio, itemWidth]);
 
   const defaultRenderItem = (item: GalleryItem, index: number) => (
     <img
@@ -60,7 +56,6 @@ const GridGalleryItem: React.FC<GridGalleryItemProps> = ({
 
   return (
     <div
-      ref={itemRef}
       className={`grid-gallery-item ${itemClassName}`}
       style={{
         gridColumn: `span ${colSpan}`,
@@ -86,6 +81,7 @@ const GridGallery: React.FC<GridGalleryProps> = ({
   itemHeight = 200,
   aspectRatio,
   className = '',
+  containerWidth,
   style = {},
   itemClassName = '',
   itemStyle = {},
@@ -98,6 +94,7 @@ const GridGallery: React.FC<GridGalleryProps> = ({
 
   // Calculate the effective gutter value
   const gutterSize = useMemo(() => getGutter(gutter, windowSize), [gutter, windowSize]);
+  const itemWidth = useMemo(() => ((containerWidth - gutterSize * (columnsCount - 1))) / columnsCount, [containerWidth, gutterSize, columnsCount]);
 
   return (
     <div
@@ -114,6 +111,7 @@ const GridGallery: React.FC<GridGalleryProps> = ({
           key={item.id || `grid-item-${index}`}
           item={item}
           index={index}
+          itemWidth={itemWidth}
           itemHeight={itemHeight}
           aspectRatio={aspectRatio}
           gutterSize={gutterSize}

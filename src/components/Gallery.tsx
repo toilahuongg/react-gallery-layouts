@@ -68,6 +68,7 @@ const Gallery: React.FC<GalleryProps> = ({
         return (
           <GridGallery
             {...commonProps}
+            containerWidth={containerWidth}
             columns={layoutOptions.grid?.columns}
             gutter={layoutOptions.grid?.gutter}
             itemHeight={layoutOptions.grid?.itemHeight}
