@@ -20,9 +20,9 @@ const ExampleGallery: React.FC = () => {
   const layoutOptions: GalleryLayoutOptions = {
     masonry: {
       columns: {
-        768: 2,
-        1024: 3,
-        default: 1,
+        768: 3,
+        1024: 4,
+        default: 2,
       },
       gutter: 16,
     },

@@ -38,7 +38,6 @@ const MasonryGallery: React.FC<MasonryGalleryProps> = ({
     
     sortedItems.forEach((item, index) => {
       const colSpan = Math.min(item.colSpan || 1, columnsCount);
-      const rowSpan = item.rowSpan || 1;
       
       // Find the best position for this item
       let bestColumn = 0;
@@ -59,29 +58,29 @@ const MasonryGallery: React.FC<MasonryGalleryProps> = ({
         lowestHeight = columnHeights[bestColumn];
       }
       
-      // Calculate aspect ratio-based height for the grid (normalized to grid units)
+      // Calculate height based on aspect ratio and column span
       const aspectRatio = (item.height || 100) / (item.width || 100);
-      // Scale the height based on column span to maintain aspect ratio
-      const scaledHeight = Math.max(1, Math.round(aspectRatio * 10)) * rowSpan;
+      // Calculate the actual height in grid units based on column span
+      const height = Math.max(1, Math.round(aspectRatio * colSpan * 10));
       
       // Add item to the grid with position information
       itemsWithPosition.push({
         ...item,
         gridRow: lowestHeight + 1,
         gridColumn: bestColumn + 1,
-        gridRowSpan: scaledHeight,
+        gridRowSpan: height,
         gridColumnSpan: colSpan
       });
       
       // Update column heights
       for (let i = bestColumn; i < bestColumn + colSpan; i++) {
         if (i < columnsCount) {
-          columnHeights[i] = lowestHeight + scaledHeight;
+          columnHeights[i] = lowestHeight + height;
         }
       }
       
       // Update the grid representation
-      for (let i = lowestHeight; i < lowestHeight + scaledHeight; i++) {
+      for (let i = lowestHeight; i < lowestHeight + height; i++) {
         if (!grid[i]) grid[i] = Array(columnsCount).fill(null);
         for (let j = bestColumn; j < bestColumn + colSpan; j++) {
           if (j < columnsCount) {
