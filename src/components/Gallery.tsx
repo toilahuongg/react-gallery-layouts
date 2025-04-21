@@ -10,13 +10,13 @@ const Gallery: React.FC<GalleryProps> = ({
   items,
   layout = 'masonry',
   layoutOptions = {},
-  renderItem,
   className = '',
   style = {},
   itemClassName = '',
   itemStyle = {},
-  onItemClick,
   lazyLoad = false,
+  renderItem,
+  onItemClick,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);

@@ -1,0 +1,77 @@
+.hover-dir-container {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.hover-dir-overlay {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 99;
+}
+
+.hover-dir-content {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.5s ease;
+}
+
+.hover-dir-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Left animation */
+.hover-dir-container.left::before {
+  top: 0;
+  left: -100%;
+}
+
+.hover-dir-container.left:hover::before {
+  left: 0;
+  opacity: 1;
+}
+
+/* Right animation */
+.hover-dir-container.right::before {
+  top: 0;
+  left: 100%;
+}
+
+.hover-dir-container.right:hover::before {
+  left: 0;
+  opacity: 1;
+}
+
+/* Top animation */
+.hover-dir-container.top::before {
+  top: -100%;
+  left: 0;
+}
+
+.hover-dir-container.top:hover::before {
+  top: 0;
+  opacity: 1;
+}
+
+/* Bottom animation */
+.hover-dir-container.bottom::before {
+  top: 100%;
+  left: 0;
+}
+
+.hover-dir-container.bottom:hover::before {
+  top: 0;
+  opacity: 1;
+}
+
+/* Content animation */
+.hover-dir-container > * {
+  /* position: relative; */
+  transition: transform 0.5s ease;
+}

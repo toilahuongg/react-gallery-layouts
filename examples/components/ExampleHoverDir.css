@@ -1,0 +1,62 @@
+.example-hover-dir {
+  font-family: 'Roboto Condensed', sans-serif;
+  padding: 20px;
+}
+
+.example-hover-dir h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: 300;
+}
+
+.example-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.example-box {
+  width: 300px;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.example-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.overlay-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  width: 80%;
+}
+
+.overlay-content h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-weight: 300;
+}
+
+.overlay-content p {
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+/* Clearfix for container */
+.example-container::after {
+  content: '';
+  display: table;
+  clear: both;
+} 

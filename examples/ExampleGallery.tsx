@@ -3,6 +3,7 @@ import { Gallery, GalleryItem, GalleryLayout, GalleryLayoutOptions } from '../sr
 import ResizableItem from './components/ResizableItem-v2';
 import { fakeImages } from './fake-data';
 import { useGalleryStore } from './store/galleryStore';
+import HoverDir from './components/hover-dir';
 
 const ExampleGallery: React.FC = () => {
   const [layout, setLayout] = useState<GalleryLayout>('grid');
@@ -43,7 +44,7 @@ const ExampleGallery: React.FC = () => {
       alignment: 'flex-end',
     },
     justified: {
-      
+
       targetRowHeight: 200,
       maxRowHeight: 300,
       containerPadding: 16,
@@ -54,13 +55,15 @@ const ExampleGallery: React.FC = () => {
   // Custom render function using our ResizableItem component
   const renderResizableItem = useCallback((item: GalleryItem, lazyLoad: boolean, index: number) => {
     return (
-      <ResizableItem
-        item={item}
-        index={index}
-        lazyLoad={lazyLoad}
-        devMode={devMode}
-        resizeDirectionAllowed={['left', 'right', 'top', 'bottom']}
-      />
+      <HoverDir>
+        <ResizableItem
+          item={item}
+          index={index}
+          lazyLoad={lazyLoad}
+          devMode={devMode}
+          resizeDirectionAllowed={['left', 'right', 'top', 'bottom']}
+        />
+      </HoverDir>
     );
   }, [lazyLoad, devMode]);
 
@@ -80,49 +83,49 @@ const ExampleGallery: React.FC = () => {
   return (
     <div className="example-gallery-container">
       <h1>Interactive Gallery Layouts</h1>
-      
+
       <div className="layout-selector">
         <p>Select a layout:</p>
         <div className="button-group">
-          <button 
+          <button
             onClick={() => setLayout('masonry')}
             className={layout === 'masonry' ? 'active' : ''}
           >
             Masonry
           </button>
-          <button 
+          <button
             onClick={() => setLayout('grid')}
             className={layout === 'grid' ? 'active' : ''}
           >
             Grid
           </button>
-          <button 
+          <button
             onClick={() => setLayout('stack')}
             className={layout === 'stack' ? 'active' : ''}
           >
             Stack
           </button>
-          <button 
+          <button
             onClick={() => setLayout('justified')}
             className={layout === 'justified' ? 'active' : ''}
           >
             Justified
           </button>
         </div>
-        
+
         <div className="options-group" style={{ marginTop: '20px' }}>
           <label>
-            <input 
-              type="checkbox" 
-              checked={lazyLoad} 
+            <input
+              type="checkbox"
+              checked={lazyLoad}
               onChange={() => setLazyLoad(!lazyLoad)}
             />
             Enable lazy loading
           </label>
           <label style={{ marginLeft: '20px' }}>
-            <input 
-              type="checkbox" 
-              checked={devMode} 
+            <input
+              type="checkbox"
+              checked={devMode}
               onChange={() => setDevMode(!devMode)}
             />
             Developer Mode
@@ -131,7 +134,7 @@ const ExampleGallery: React.FC = () => {
 
         {devMode && showSpanExplanation()}
       </div>
-      
+
       <div className="gallery-wrapper">
         <Gallery
           items={items}
@@ -142,7 +145,7 @@ const ExampleGallery: React.FC = () => {
           lazyLoad={lazyLoad}
         />
       </div>
-{/*       
+      {/*       
       {selectedItem && !isDragging && (
         <div className="modal" onClick={() => setSelectedItem(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
