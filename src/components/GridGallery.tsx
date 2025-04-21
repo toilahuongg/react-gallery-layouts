@@ -13,9 +13,10 @@ interface GridGalleryItemProps {
   itemClassName?: string;
   itemWidth: number;
   itemStyle?: React.CSSProperties;
+  lazyLoad?: boolean;
+  maxColSpan?: number;
   onItemClick?: (item: GalleryItem, index: number) => void;
   renderItem?: (item: GalleryItem, lazyLoad: boolean, index: number) => React.ReactNode;
-  lazyLoad?: boolean;
 }
 
 const GridGalleryItem: React.FC<GridGalleryItemProps> = ({
@@ -30,6 +31,7 @@ const GridGalleryItem: React.FC<GridGalleryItemProps> = ({
   onItemClick,
   renderItem,
   lazyLoad = false,
+  maxColSpan = 12,
 }) => {
   const colSpan = item.colSpan || 1;
   const rowSpan = item.rowSpan || 1;
@@ -53,7 +55,7 @@ const GridGalleryItem: React.FC<GridGalleryItemProps> = ({
     <div
       className={`gallery-item gallery-item-grid ${itemClassName}`}
       style={{
-        gridColumn: `span ${colSpan}`,
+        gridColumn: `span ${Math.min(colSpan, maxColSpan)}`,
         gridRow: `span ${rowSpan}`,
         height: $itemHeight * rowSpan + gutterSize * (rowSpan - 1),
         ...itemStyle,
@@ -113,6 +115,7 @@ const GridGallery: React.FC<GridGalleryProps> = ({
           onItemClick={onItemClick}
           renderItem={renderItem}
           lazyLoad={lazyLoad}
+          maxColSpan={columnsCount}
         />
       ))}
     </div>
